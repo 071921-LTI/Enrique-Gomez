@@ -108,4 +108,60 @@ public class CalculatorTest {
     public void divideBy0() {
         assertThrows(CalculatorException.class, () -> calc.divide(1, 0));
     }
+
+    @Order(10)
+    @Test
+    public void is2Prime() {
+        boolean expected = true;
+        boolean actualResult = calc.isPrime(2);
+        assertEquals(expected, actualResult, "2 is prime");
+    }
+
+    @Order(11)
+    @Test
+    public void is9Prime() {
+        boolean expected = false;
+        boolean actualResult = calc.isPrime(9);
+        assertEquals(expected, actualResult, "9 is not prime");
+    }
+
+    @Order(12)
+    @Test
+    public void is1Prime() {
+        boolean expected = true;
+        boolean actualResult = calc.isPrime(1);
+        assertEquals(expected, actualResult);
+    }
+
+    @Order(13)
+    @Test
+    public void is5Prime() {
+        boolean expected = true;
+        boolean actualResult = calc.isPrime(5);
+        assertEquals(expected, actualResult);
+    }
+
+    @Order(14)
+    @Test
+    public void is100Prime() {
+        boolean expected = false;
+        boolean actualResult = calc.isPrime(100);
+        assertEquals(expected, actualResult);
+    }
+
+    @Order(15)
+    @Test
+    public void hasThreeDecimals() {
+        boolean expected = true;
+        boolean actualResult = calc.compareThreeDecimals(3.123, 3.123445);
+        assertEquals(expected, actualResult);
+    }
+
+    @Order(16)
+    @Test
+    public void doesNotHaveThreeDecimals() {
+        boolean expected = false;
+        boolean actualResult = calc.compareThreeDecimals(3.123, 3.12256);
+        assertEquals(expected, actualResult);
+    }
 }

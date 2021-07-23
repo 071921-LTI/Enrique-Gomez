@@ -31,4 +31,32 @@ public class Calculator {
         if (y == 0) throw new CalculatorException("Can't divide by 0!");
         return x / y;
     }
+
+    public boolean isPrime(double x) {
+        boolean isPrime = true;
+        if (x == 0) return false;
+
+        for (int i = 1; i < x; i++) {
+            if (x != i && i != 1) {
+                if (x%i == 0) {
+                    isPrime = false;
+                }
+            }
+        }
+
+        return isPrime;
+    }
+
+    public boolean compareThreeDecimals(double x, double y) {
+        double first = Math.floor(x);
+        double second = Math.floor(y);
+
+        // not quite done here. Math.floor rounds to whole number when i need decimals
+        if (first == second) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
