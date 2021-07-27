@@ -1,7 +1,9 @@
 package com.lntinfotech;
 
+import com.lntinfotech.controllers.Shop;
+
 public class App {
     public static void main( String[] args ) {
-        System.out.println( "Hello World!" );
+        Shop.enterShop();
     }
 }
