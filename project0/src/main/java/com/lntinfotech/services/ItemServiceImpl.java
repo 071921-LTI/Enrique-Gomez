@@ -1,13 +1,13 @@
 package com.lntinfotech.services;
 
-import com.lntinfotech.daos.ItemCollection;
+import com.lntinfotech.daos.ItemPostgres;
 import com.lntinfotech.daos.ItemDao;
 import com.lntinfotech.exceptions.ItemNotFoundException;
 import com.lntinfotech.models.Item;
 
 public class ItemServiceImpl implements ItemService{
 
-    private ItemDao id = new ItemCollection(); 
+    private ItemDao id = new ItemPostgres(); 
     @Override
     public Item getItem(int itemId) throws ItemNotFoundException {
         // TODO Auto-generated method stub

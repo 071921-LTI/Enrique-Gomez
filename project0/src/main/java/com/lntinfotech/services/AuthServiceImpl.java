@@ -1,13 +1,13 @@
 package com.lntinfotech.services;
 
-import com.lntinfotech.daos.UserCollection;
+import com.lntinfotech.daos.UserPostgres;
 import com.lntinfotech.daos.UserDao;
 import com.lntinfotech.exceptions.UserNotFoundException;
 import com.lntinfotech.models.User;
 
 public class AuthServiceImpl implements AuthService {
 
-    private UserDao ud = new UserCollection();
+    private UserDao ud = new UserPostgres();
 
     @Override
     public boolean login(User user) {

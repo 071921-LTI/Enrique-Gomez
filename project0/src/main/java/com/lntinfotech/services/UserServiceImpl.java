@@ -1,13 +1,13 @@
 package com.lntinfotech.services;
 
-import com.lntinfotech.daos.UserCollection;
+import com.lntinfotech.daos.UserPostgres;
 import com.lntinfotech.daos.UserDao;
 import com.lntinfotech.exceptions.UserNotFoundException;
 import com.lntinfotech.models.User;
 
 public class UserServiceImpl implements UserService {
 
-    private UserDao ud = new UserCollection();
+    private UserDao ud = new UserPostgres();
     
     @Override
     public User getUser(String username) throws UserNotFoundException {
