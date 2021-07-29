@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(String username) throws UserNotFoundException {
         // return ud.getUser(username);
 
-        return new User("ezemog1996", "gomez1996", "customer");
+        return new User(1, "ezemog1996", "gomez1996", "customer");
     }
 
     @Override

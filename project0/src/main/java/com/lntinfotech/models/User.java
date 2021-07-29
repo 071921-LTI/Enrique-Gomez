@@ -4,15 +4,38 @@ import java.util.Objects;
 
 public class User {
 
+    private int id;
 	private String username;
     private String password;
     private String userType;
 
-    public User(String username, String password, String userType) {
+    public User(int id) {
         super();
+
+        this.id = id;
+    }
+
+    public User(String username, String password) {
+        super();
+
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(int id, String username, String password, String userType) {
+        super();
+        this.id = id;
         this.username = username;
         this.password = password;
         this.userType = userType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -41,7 +64,7 @@ public class User {
     
     @Override
 	public int hashCode() {
-		return Objects.hash(password, userType, username);
+		return Objects.hash(id, password, userType, username);
 	}
 
 	@Override
@@ -53,13 +76,13 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(password, other.password) && Objects.equals(userType, other.userType)
+		return id == other.id && Objects.equals(password, other.password) && Objects.equals(userType, other.userType)
 				&& Objects.equals(username, other.username);
 	}
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", userType=" + userType + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", userType=" + userType + "]";
 	}
 	
 }

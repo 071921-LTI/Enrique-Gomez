@@ -14,7 +14,10 @@ create table if not exists items(
 
 create table if not exists offers(
 	offerId SERIAL primary key,
+	customerId INTEGER references users(userId),
 	itemId INTEGER references items(itemId),
 	offerAmount NUMERIC(6, 2) not null,
 	isAccepted BOOLEAN not null default false
 );
+
+insert into users(username, password, userType) values ('enrique', 'password', 'customer');

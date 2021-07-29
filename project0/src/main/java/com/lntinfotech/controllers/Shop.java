@@ -1,8 +1,9 @@
 package com.lntinfotech.controllers;
 
+import java.util.List;
 import java.util.Scanner;
 
-import com.lntinfotech.exceptions.UserNotFoundException;
+import com.lntinfotech.models.Item;
 import com.lntinfotech.models.User;
 import com.lntinfotech.services.AuthService;
 import com.lntinfotech.services.AuthServiceImpl;
@@ -19,7 +20,7 @@ public class Shop {
     static ItemService is = new ItemServiceImpl();
 
     public static void enterShop() {
-        print("", "Welcome to Zorky Shop!", "What would you like to do?", "1. Sign in", "2. Sign up", "3. See our products (can view but need an account to purchase)", "4. Leave");
+        print("", "Welcome to Zorky Shop!", "What would you like to do?", "1. Sign in", "2. Sign up", "3. See our products (can view but need an account to make a bid)", "4. Leave");
 
         String entranceChoice = sc.nextLine();
 
@@ -48,10 +49,10 @@ public class Shop {
 
         String enteredPassword = sc.nextLine();
 
-        User credentials = new User(enteredUsername, enteredPassword, "");
-
-        if (as.login(credentials)) {
-            loggedIn(credentials);
+        User credentials = new User(enteredUsername, enteredPassword);
+        User loggedInUser = as.login(credentials);
+        if (loggedInUser != null) {
+            loggedIn(loggedInUser);
         } else {
             print("Username and password do not match", "Press enter to try again or type 'exit' or 'quit' to quit");
 
@@ -72,27 +73,21 @@ public class Shop {
     }
 
     static void loggedIn(User user) {
-        try {
-            User loggedInUser = us.getUser(user.getUsername());
 
-            if (loggedInUser.getUserType().equals("customer")) {
-                customerOptions(loggedInUser);
-            } else {
-                print("he is an employee");
-            }
-        } catch (UserNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (user.getUserType().equals("customer")) {
+            customerOptions(user);
+        } else {
+            employeeOptions(user);
         }
     }
 
     static void customerOptions(User user) {
-        print("", "You're logged in!", "What would you like to do?", "1. View our products for purchase", "2. Logout");
+        print("", "You're logged in!", "What would you like to do?", "1. View our products to make an offer", "2. Logout");
         
         String customerChoice = sc.nextLine();
 
         while (!customerChoice.equals("1") && !customerChoice.equals("2")) {
-            print("Please enter 1 or 2", "1. View our products for purchase", "2. Logout");
+            print("Please enter 1 or 2", "1. View our products to make an offer", "2. Logout");
 
             customerChoice = sc.nextLine();
         }
@@ -100,12 +95,36 @@ public class Shop {
         if (customerChoice.equals("2")) {
             sc.close();
         } else if (customerChoice.equals("1")) {
-            print("here are our products!");
+            customerProducts(user);
         }
         
     }
 
-    static void employeeOptions(User user) {
+    static void customerProducts(User user) {
+        List<Item> items = is.getAllItems();
 
+        for(Item item : items) {
+            System.out.println(item.getItemName());
+        }
+    }
+
+    static void employeeOptions(User user) {
+        print("", "You're logged in!", "What would you like to do?", "1. View our products to accept an offer", "2. Add an item", "3. Logout");
+        
+        String employeeChoice = sc.nextLine();
+
+        while (!employeeChoice.equals("1") && !employeeChoice.equals("2") && !employeeChoice.equals("3")) {
+            print("Please enter 1, 2, or 3", "1. View our products to accept an offer", "2. Add an item", "3. Logout");
+
+            employeeChoice = sc.nextLine();
+        }
+
+        if (employeeChoice.equals("3")) {
+            sc.close();
+        } else if (employeeChoice.equals("1")) {
+            print("here are our products!");
+        } else if (employeeChoice.equals("2")) {
+            print("adding an item!");
+        }
     }
 }

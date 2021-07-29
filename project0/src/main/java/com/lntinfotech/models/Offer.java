@@ -4,33 +4,49 @@ import java.util.Objects;
 
 public class Offer {
 
-    private int offeredFor;
+    private int id;
+    private int customerId;
 	private int itemId;
     private float offerAmount;
     private boolean isAccepted;
 
-    public Offer(int offeredFor, int itemId, float offerAmount, boolean isAccepted) {
+    public Offer(int id) {
         super();
 
-        this.offeredFor = offeredFor;
+        this.id = id;
+    }
+
+    public Offer(int id, int customerId, int itemId, float offerAmount, boolean isAccepted) {
+        super();
+
+        this.id = id;
+        this.customerId = customerId;
         this.itemId = itemId;
         this.offerAmount = offerAmount;
         this.isAccepted = isAccepted;
     }
 
-    public int getOfferedFor() {
-        return offeredFor;
+    public int getId() {
+        return id;
     }
 
-    public void setOfferedFor(int offeredFor) {
-        this.offeredFor = offeredFor;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getitemId() {
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getItemId() {
         return itemId;
     }
 
-    public void setitemId(int itemId) {
+    public void setItemId(int itemId) {
         this.itemId = itemId;
     }
 
@@ -52,7 +68,7 @@ public class Offer {
     
     @Override
 	public int hashCode() {
-		return Objects.hash(isAccepted, offerAmount, itemId, offeredFor);
+		return Objects.hash(customerId, id, isAccepted, itemId, offerAmount);
 	}
 
 	@Override
@@ -64,14 +80,14 @@ public class Offer {
 		if (getClass() != obj.getClass())
 			return false;
 		Offer other = (Offer) obj;
-		return isAccepted == other.isAccepted
-				&& Float.floatToIntBits(offerAmount) == Float.floatToIntBits(other.offerAmount)
-				&& Objects.equals(itemId, other.itemId) && Objects.equals(offeredFor, other.offeredFor);
+		return customerId == other.customerId && id == other.id && isAccepted == other.isAccepted
+				&& itemId == other.itemId
+				&& Float.floatToIntBits(offerAmount) == Float.floatToIntBits(other.offerAmount);
 	}
 
 	@Override
 	public String toString() {
-		return "Offer [offeredFor=" + offeredFor + ", itemId=" + itemId + ", offerAmount=" + offerAmount
+		return "Offer [id=" + id + ", customerId=" + customerId + ", itemId=" + itemId + ", offerAmount=" + offerAmount
 				+ ", isAccepted=" + isAccepted + "]";
 	}
     

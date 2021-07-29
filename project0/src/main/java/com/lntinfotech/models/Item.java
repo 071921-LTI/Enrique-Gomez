@@ -4,19 +4,32 @@ import java.util.Objects;
 
 public class Item {
 
+    private int id;
     private String itemName;
     private double minimumOffer;
     private boolean isPurchased;
 
-    public Item(String itemName, double minimumOffer, boolean isPurchased) {
+    public Item(int id) {
         super();
 
+        this.id = id;
+    }
+    public Item(int id, String itemName, double minimumOffer, boolean isPurchased) {
+        super();
+
+        this.id = id;
         this.itemName = itemName;
         this.minimumOffer = minimumOffer;
         this.isPurchased = isPurchased;
     }
 
-    public String getItemName() {
+    public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getItemName() {
         return itemName;
     }
 
@@ -32,7 +45,11 @@ public class Item {
         this.minimumOffer = minimumOffer;
     }
 
-    public boolean getIsPurchased() {
+    public void setMinimumOffer(double minimumOffer) {
+		this.minimumOffer = minimumOffer;
+	}
+    
+	public boolean getIsPurchased() {
         return isPurchased;
     }
 
@@ -42,7 +59,7 @@ public class Item {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(isPurchased, itemName, minimumOffer);
+		return Objects.hash(id, isPurchased, itemName, minimumOffer);
 	}
 
 	@Override
@@ -54,13 +71,14 @@ public class Item {
 		if (getClass() != obj.getClass())
 			return false;
 		Item other = (Item) obj;
-		return isPurchased == other.isPurchased && Objects.equals(itemName, other.itemName)
+		return id == other.id && isPurchased == other.isPurchased && Objects.equals(itemName, other.itemName)
 				&& Double.doubleToLongBits(minimumOffer) == Double.doubleToLongBits(other.minimumOffer);
 	}
 
 	@Override
 	public String toString() {
-		return "Item [itemName=" + itemName + ", minimumOffer=" + minimumOffer + ", isPurchased=" + isPurchased + "]";
+		return "Item [id=" + id + ", itemName=" + itemName + ", minimumOffer=" + minimumOffer + ", isPurchased="
+				+ isPurchased + "]";
 	}
 
 }

@@ -10,21 +10,37 @@ public class AuthServiceImpl implements AuthService {
     private UserDao ud = new UserPostgres();
 
     @Override
-    public boolean login(User user) {
+    public User login(User user) {
         
-        // try {
-        //     User existingUser = ud.getUser(user.getUsername());
+        try {
+            User existingUser = ud.getUserByUsername(user.getUsername());
 
-        //     if (existingUser.getPassword().equals(user.getPassword())) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // } catch(UserNotFoundException e) {
-        //     return false;
-        // }
+            if (existingUser.getPassword().equals(user.getPassword())) {
+                return existingUser;
+            } else {
+                return null;
+            }
+        } catch(UserNotFoundException e) {
+            return null;
+        } catch(NullPointerException e) {
+            return null;
+        }
 
-        return false;
+    }
+
+    @Override
+    public boolean register(User user) {
+        try {
+            User existingUser = ud.getUserByUsername(user.getUsername());
+
+            if (existingUser != null) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch(UserNotFoundException e) {
+            return true;
+        }
     }
     
 }
