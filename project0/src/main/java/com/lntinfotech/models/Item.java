@@ -14,6 +14,12 @@ public class Item {
 
         this.id = id;
     }
+
+    public Item(String itemName, double minimumOffer) {
+        super();
+        this.itemName = itemName;
+        this.minimumOffer = minimumOffer;
+    }
     public Item(int id, String itemName, double minimumOffer, boolean isPurchased) {
         super();
 

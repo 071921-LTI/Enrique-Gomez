@@ -8,7 +8,7 @@ public class ConnectionUtil {
     private static Connection connection;
 
     public static Connection getConnection()  throws SQLException {
-        String url = System.getenv("POSTGRES_URL");
+        String url = System.getenv("PROJECT0_POSTGRES_URL");
         String username = System.getenv("POSTGRES_USER");
         String password = System.getenv("POSTGRES_PASSWORD");
 

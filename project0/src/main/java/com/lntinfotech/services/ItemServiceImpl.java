@@ -13,14 +13,12 @@ public class ItemServiceImpl implements ItemService{
     private ItemDao id = new ItemPostgres();
     @Override
     public Item getItem(int itemId) throws ItemNotFoundException {
-        // TODO Auto-generated method stub
-        return new Item(1, "a cool item", 1.99, false);
+        return id.getItemById(itemId);
     }
 
     @Override
     public int addItem(Item item) {
-        // TODO Auto-generated method stub
-        return 1;
+        return id.addItem(item);
     }
 
     @Override

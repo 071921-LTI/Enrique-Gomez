@@ -7,8 +7,10 @@ public class Offer {
     private int id;
     private int customerId;
 	private int itemId;
-    private float offerAmount;
+    private double offerAmount;
     private boolean isAccepted;
+    private Item item;
+    private User user;
 
     public Offer(int id) {
         super();
@@ -16,7 +18,15 @@ public class Offer {
         this.id = id;
     }
 
-    public Offer(int id, int customerId, int itemId, float offerAmount, boolean isAccepted) {
+    public Offer(int customerId, int itemId, double offerAmount) {
+        super();
+
+        this.customerId = customerId;
+        this.itemId = itemId;
+        this.offerAmount = offerAmount;
+    }
+
+    public Offer(int id, int customerId, int itemId, double offerAmount, boolean isAccepted, Item item, User user) {
         super();
 
         this.id = id;
@@ -24,6 +34,8 @@ public class Offer {
         this.itemId = itemId;
         this.offerAmount = offerAmount;
         this.isAccepted = isAccepted;
+        this.item = item;
+        this.user = user;
     }
 
     public int getId() {
@@ -50,11 +62,11 @@ public class Offer {
         this.itemId = itemId;
     }
 
-    public float getOfferAmount() {
+    public double getOfferAmount() {
         return offerAmount;
     }
 
-    public void setOfferAmount(float offerAmount) {
+    public void setOfferAmount(double offerAmount) {
         this.offerAmount = offerAmount;
     }
 
@@ -66,9 +78,25 @@ public class Offer {
         this.isAccepted = isAccepted;
     }
     
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
     @Override
 	public int hashCode() {
-		return Objects.hash(customerId, id, isAccepted, itemId, offerAmount);
+		return Objects.hash(customerId, id, isAccepted, item, itemId, offerAmount, user);
 	}
 
 	@Override
@@ -81,14 +109,15 @@ public class Offer {
 			return false;
 		Offer other = (Offer) obj;
 		return customerId == other.customerId && id == other.id && isAccepted == other.isAccepted
-				&& itemId == other.itemId
-				&& Float.floatToIntBits(offerAmount) == Float.floatToIntBits(other.offerAmount);
+				&& Objects.equals(item, other.item) && itemId == other.itemId
+				&& Double.doubleToLongBits(offerAmount) == Double.doubleToLongBits(other.offerAmount)
+				&& Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
 		return "Offer [id=" + id + ", customerId=" + customerId + ", itemId=" + itemId + ", offerAmount=" + offerAmount
-				+ ", isAccepted=" + isAccepted + "]";
+				+ ", isAccepted=" + isAccepted + ", item=" + item + ", user=" + user + "]";
 	}
     
 }

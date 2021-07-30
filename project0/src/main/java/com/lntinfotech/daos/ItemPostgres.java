@@ -16,12 +16,11 @@ public class ItemPostgres implements ItemDao {
     @Override
     public int addItem(Item item) {
         int id = -1;
-        String sql = "insert into items (itemName, minimumOffer, isPurchased) values (?, ?, ?) returning itemId";
+        String sql = "insert into items (itemName, minimumOffer) values (?, ?) returning itemId";
         try(Connection connection = ConnectionUtil.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, item.getItemName());
             statement.setDouble(2, item.getMinimumOffer());
-            statement.setBoolean(3, item.getIsPurchased());
 
             ResultSet result = statement.executeQuery();
 
@@ -60,8 +59,27 @@ public class ItemPostgres implements ItemDao {
 
     @Override
     public Item getItemById(int itemId) {
-        // TODO Auto-generated method stub
-        return null;
+        String sql = "select * from items where itemId = ?";
+        Item item = null;
+        try(Connection connection = ConnectionUtil.getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, itemId);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                int id = result.getInt("itemId");
+                String itemName = result.getString("itemName");
+                double minimumOffer = result.getDouble("minimumOffer");
+                boolean isPurchased = result.getBoolean("isPurchased");
+                item = new Item(id, itemName, minimumOffer, isPurchased);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return item;
     }
 
     @Override
