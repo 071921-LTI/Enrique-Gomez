@@ -36,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
             if (existingUser != null) {
                 return false;
             } else {
+            	ud.addUser(user);
                 return true;
             }
         } catch(UserNotFoundException e) {

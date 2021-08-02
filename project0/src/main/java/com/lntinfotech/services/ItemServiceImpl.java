@@ -7,6 +7,7 @@ import java.util.List;
 import com.lntinfotech.daos.ItemDao;
 import com.lntinfotech.exceptions.ItemNotFoundException;
 import com.lntinfotech.models.Item;
+import com.lntinfotech.models.Offer;
 
 public class ItemServiceImpl implements ItemService{
 
@@ -25,5 +26,15 @@ public class ItemServiceImpl implements ItemService{
     public List<Item> getAllItems() {
         return id.getAllItems();
     }
+
+    @Override
+    public String removeItem(int itemId) {
+        return id.deleteItem(itemId);
+    }
+
+	@Override
+	public List<Offer> getItemsByOwner(int ownerId) {
+		return id.getItemsByOwner(ownerId);
+	}
     
 }

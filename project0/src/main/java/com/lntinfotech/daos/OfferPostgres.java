@@ -1,6 +1,8 @@
 package com.lntinfotech.daos;
 
+import java.awt.print.Printable;
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,8 +19,27 @@ public class OfferPostgres implements OfferDao {
 
     @Override
     public Offer getOffer(int offerId) {
-        // TODO Auto-generated method stub
-        return null;
+        String sql = "select * from offers where offerId = ?";
+        Offer offer = null;
+        try(Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, offerId);
+
+            ResultSet result = statement.executeQuery();
+
+            if(result.next()) {
+                int customerId = result.getInt("customerId");
+                int itemId = result.getInt("itemId");
+                double offerAmount = result.getDouble("offerAmount");
+
+                offer = new Offer(customerId, itemId, offerAmount);
+            }
+
+            return offer;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -40,7 +61,7 @@ public class OfferPostgres implements OfferDao {
 
     @Override
     public List<Offer> getAllOffers() {
-        String sql = "select * from offers join items on offers.itemId = items.itemId";
+        String sql = "select * from offers join items on offers.itemId = items.itemId join users on offers.customerId = users.userId";
         List<Offer> offers = new ArrayList<>();
         try(Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
@@ -64,6 +85,46 @@ public class OfferPostgres implements OfferDao {
         } catch(SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public boolean acceptOffer(int offerId, Offer offer) {
+        String sql1 = "update offers set isAccepted = true where offerId = ? returning offerId";
+        String sql2 = "update items set isPurchased = true where itemId = ? returning itemId";
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql1);
+            statement.setInt(1, offerId);
+            
+
+            statement.executeQuery();
+
+            PreparedStatement secondStatement = connection.prepareStatement(sql2);
+            secondStatement.setBoolean(1, true);
+            secondStatement.setInt(1, offer.getItemId());
+
+            secondStatement.executeQuery();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean rejectOffer(int offer) {
+        String sql1 = "delete from offers where offerId = ? returning offerId";
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql1);
+            statement.setInt(1, offer);
+
+            statement.executeQuery();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
     

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lntinfotech.models.Item;
+import com.lntinfotech.models.Offer;
 import com.lntinfotech.util.ConnectionUtil;
 
 public class ItemPostgres implements ItemDao {
@@ -89,9 +90,59 @@ public class ItemPostgres implements ItemDao {
     }
 
     @Override
-    public int deleteItem(int itemId) {
-        // TODO Auto-generated method stub
-        return 0;
+    public String deleteItem(int itemId) {
+        String sql1 = "delete from offers where itemId = ? returning offerId";
+        String sql = "delete from items where itemId = ? returning itemName";
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement firstStatement = connection.prepareStatement(sql1);
+            firstStatement.setInt(1, itemId);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, itemId);
+
+            firstStatement.executeQuery();
+
+            ResultSet result = statement.executeQuery();
+
+            String itemName = null;
+
+            if(result.next()) {
+                itemName = result.getString("itemName");
+            }
+            return itemName;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Offer> getItemsByOwner(int ownerId) {
+        String sql = "select * from items join offers on offers.itemId = items.itemId where isAccepted = true and customerId = ?";
+        List<Offer> offers = new ArrayList<>();
+        try (Connection connection = ConnectionUtil.getConnection()) {
+        	PreparedStatement statement = connection.prepareStatement(sql);
+        	statement.setInt(1, ownerId);
+        	
+        	ResultSet result = statement.executeQuery();
+        	
+        	while(result.next()) {
+        		int offerId = result.getInt("offerId");
+        		int customerId = result.getInt("customerId");
+        		int itemId = result.getInt("itemId");
+        		double offerAmount = result.getDouble("offerAmount");
+        		boolean isAccepted = result.getBoolean("isAccepted");
+        		Item item = new Item(result.getInt("itemId"), result.getString("itemName"), result.getDouble("minimumOffer"), result.getBoolean("isPurchased"));
+        		
+        		offers.add(new Offer(offerId, customerId, itemId, offerAmount, isAccepted, item, null));
+        	}
+        	
+        } catch(SQLException e) {
+        	e.printStackTrace();
+        	return null;
+        }
+        
+        return offers;
     }
     
 }

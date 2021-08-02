@@ -61,8 +61,19 @@ public class UserPostgres implements UserDao {
 
     @Override
     public boolean addUser(User user) {
-        // TODO Auto-generated method stub
-        return false;
+        String sql = "insert into users (username, password, userType) values (?, ?, 'customer') returning userId";
+        
+        try (Connection connection = ConnectionUtil.getConnection()) {
+        	PreparedStatement statement = connection.prepareStatement(sql);
+        	statement.setString(1, user.getUsername());
+        	statement.setString(2, user.getPassword());
+        	
+        	statement.executeQuery();
+        	
+        	return true;
+        } catch (SQLException e) {
+        	return false;
+        }
     }
 
     @Override

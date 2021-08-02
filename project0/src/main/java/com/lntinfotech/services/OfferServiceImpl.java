@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.lntinfotech.daos.OfferDao;
 import com.lntinfotech.daos.OfferPostgres;
-import com.lntinfotech.models.Item;
 import com.lntinfotech.models.Offer;
 
 public class OfferServiceImpl implements OfferService{
@@ -17,14 +16,23 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public boolean acceptOffer(Item item, Offer offer) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean acceptOffer(int offerId, Offer offer) {
+        return od.acceptOffer(offerId, offer);
     }
 
     @Override
     public List<Offer> getAllOffers() {
         return od.getAllOffers();
+    }
+
+    @Override
+    public Offer getOffer(int offerId) {
+        return od.getOffer(offerId);
+    }
+
+    @Override
+    public boolean rejectOffer(int offer) {
+        return od.rejectOffer(offer);
     }
     
 }

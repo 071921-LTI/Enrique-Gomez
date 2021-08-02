@@ -1,0 +1,36 @@
+*, html {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background-color: green;
+}
+
+nav {
+    background-color: white;
+    display: flex;
+}
+
+.nav-element {
+    margin: 10px;
+}
+
+main {
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 5px;
+    background-color: whitesmoke;
+}
+
+.colorless-link {
+    color: black;
+}
+
+ul {
+    list-style-type: none;
+}
