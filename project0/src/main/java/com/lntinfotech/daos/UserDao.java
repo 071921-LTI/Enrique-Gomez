@@ -12,5 +12,5 @@ public interface UserDao {
     public abstract List<User> getAllUsers();
     public abstract boolean addUser(User user);
     public abstract int updateUser(User user);
-    public abstract int deleteUser(int id);
+    public abstract int deleteUser(String username);
 }

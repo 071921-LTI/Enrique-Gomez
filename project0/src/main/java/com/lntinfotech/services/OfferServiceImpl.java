@@ -34,5 +34,15 @@ public class OfferServiceImpl implements OfferService{
     public boolean rejectOffer(int offer) {
         return od.rejectOffer(offer);
     }
+
+    @Override
+    public List<Offer> getAcceptedOffersByCustomer(int customerId) {
+        return od.getAcceptedOffersByCustomer(customerId);
+    }
+
+    @Override
+    public List<Offer> getAllPayments() {
+        return od.getAllPaymentsReceived();
+    }
     
 }

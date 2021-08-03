@@ -10,4 +10,6 @@ public interface OfferService {
     public abstract List<Offer> getAllOffers();
     public abstract Offer getOffer(int offerId);
     public abstract boolean rejectOffer(int offer);
+    public abstract List<Offer> getAcceptedOffersByCustomer(int customerId);
+    public abstract List<Offer> getAllPayments();
 }

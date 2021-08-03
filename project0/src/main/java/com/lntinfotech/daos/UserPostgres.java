@@ -83,9 +83,22 @@ public class UserPostgres implements UserDao {
     }
 
     @Override
-    public int deleteUser(int id) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int deleteUser(String username) {
+        String sql = "delete from users where username = ? returning userId";
+        int userId = -1;
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+
+            ResultSet result = statement.executeQuery();
+            
+            if (result.next()) {
+                userId = result.getInt("userId");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userId;
     }
 
     @Override

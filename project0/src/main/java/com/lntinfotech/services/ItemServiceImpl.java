@@ -36,5 +36,10 @@ public class ItemServiceImpl implements ItemService{
 	public List<Offer> getItemsByOwner(int ownerId) {
 		return id.getItemsByOwner(ownerId);
 	}
+
+    @Override
+    public boolean payForItem(int itemId) {
+        return id.payItem(itemId);
+    }
     
 }

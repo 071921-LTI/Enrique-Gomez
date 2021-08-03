@@ -13,8 +13,11 @@ C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\exceptions\UserNotFoundException.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\services\ItemService.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\exceptions\AuthException.java
+C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\services\OfferService.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\models\Item.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\daos\OfferDao.java
+C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\services\OfferServiceImpl.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\models\User.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\models\Offer.java
 C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\services\UserServiceImpl.java
+C:\Users\Lntinfotech\Documents\LTI-Bootcamp\Enrique-Gomez\project0\src\main\java\com\lntinfotech\daos\OfferPostgres.java

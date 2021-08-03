@@ -12,4 +12,5 @@ public interface ItemDao {
     public abstract int updateItem(Item item);
     public abstract String deleteItem(int itemId);
     public abstract List<Offer> getItemsByOwner(int ownerId);
+    public abstract boolean payItem(int item);
 }

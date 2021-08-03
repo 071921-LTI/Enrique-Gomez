@@ -6,4 +6,5 @@ import com.lntinfotech.models.User;
 public interface UserService {
     public abstract User getUser(String username) throws UserNotFoundException;
     public abstract boolean addUser(User user);
+    public abstract int deleteUser(String username);
 }

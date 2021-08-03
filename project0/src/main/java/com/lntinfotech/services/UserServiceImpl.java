@@ -20,5 +20,10 @@ public class UserServiceImpl implements UserService {
     public boolean addUser(User user) {
         return ud.addUser(user);
     }
+
+    @Override
+    public int deleteUser(String username) {
+        return ud.deleteUser(username);
+    }
     
 }

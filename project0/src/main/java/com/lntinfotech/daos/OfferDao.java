@@ -10,4 +10,6 @@ public interface OfferDao {
     public abstract List<Offer> getAllOffers();
     public abstract boolean acceptOffer(int offerId, Offer offer);
     public abstract boolean rejectOffer(int offer);
+    public abstract List<Offer> getAcceptedOffersByCustomer(int customerId);
+    public abstract List<Offer> getAllPaymentsReceived();
 }

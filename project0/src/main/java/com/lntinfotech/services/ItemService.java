@@ -12,4 +12,5 @@ public interface ItemService {
     public abstract List<Item> getAllItems();
     public abstract String removeItem(int itemId);
     public abstract List<Offer> getItemsByOwner(int ownerId);
+    public abstract boolean payForItem(int itemId);
 }

@@ -15,6 +15,8 @@ import com.lntinfotech.models.Offer;
 import com.lntinfotech.models.User;
 import com.lntinfotech.util.ConnectionUtil;
 
+import org.postgresql.core.SqlCommand;
+
 public class OfferPostgres implements OfferDao {
 
     @Override
@@ -91,19 +93,12 @@ public class OfferPostgres implements OfferDao {
     @Override
     public boolean acceptOffer(int offerId, Offer offer) {
         String sql1 = "update offers set isAccepted = true where offerId = ? returning offerId";
-        String sql2 = "update items set isPurchased = true where itemId = ? returning itemId";
         try (Connection connection = ConnectionUtil.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql1);
             statement.setInt(1, offerId);
             
 
             statement.executeQuery();
-
-            PreparedStatement secondStatement = connection.prepareStatement(sql2);
-            secondStatement.setBoolean(1, true);
-            secondStatement.setInt(1, offer.getItemId());
-
-            secondStatement.executeQuery();
 
             return true;
         } catch (SQLException e) {
@@ -127,7 +122,58 @@ public class OfferPostgres implements OfferDao {
             return false;
         }
     }
-    
-    
-    
+
+    @Override
+    public List<Offer> getAcceptedOffersByCustomer(int customerId) {
+        String sql = "select * from items join offers on offers.itemId = items.itemId where items.isPurchased = false and offers.isAccepted = true and offers.customerId = ?";
+        List<Offer> offers = new ArrayList<>();
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, customerId);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                int offerId = result.getInt("offerId");
+                int userId = result.getInt("customerId");
+                int itemId = result.getInt("itemId");
+                double offerAmount = result.getDouble("offerAmount");
+                boolean isAccepted = result.getBoolean("isAccepted");
+                Item item = new Item(result.getInt("itemId"), result.getString("itemName"), result.getDouble("minimumOffer"), result.getBoolean("isPurchased"));
+
+                offers.add(new Offer(offerId, userId, itemId, offerAmount, isAccepted, item, null));
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return offers;
+    }
+
+    @Override
+    public List<Offer> getAllPaymentsReceived() {
+        String sql = "select * from offers join items on offers.itemId = items.itemId join users on offers.customerId = users.userId where items.ispurchased = true";
+        List<Offer> offers = new ArrayList<>();
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                int offerId = result.getInt("offerId");
+                int customerId = result.getInt("customerId");
+                int itemId = result.getInt("itemId");
+                double offerAmount = result.getDouble("offerAmount");
+                boolean isAccepted = result.getBoolean("isAccepted");
+                Item item = new Item(result.getInt("itemId"), result.getString("itemName"), result.getDouble("minimumOffer"), result.getBoolean("isPurchased"));
+                User user = new User(result.getString("username"));
+                
+                offers.add(new Offer(offerId, customerId, itemId, offerAmount, isAccepted, item, user));
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offers;
+    }
 }

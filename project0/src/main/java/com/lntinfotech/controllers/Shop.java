@@ -16,7 +16,12 @@ import com.lntinfotech.services.OfferServiceImpl;
 import com.lntinfotech.services.UserService;
 import com.lntinfotech.services.UserServiceImpl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Shop {
+
+    private static Logger log = LogManager.getRootLogger();
     
     static Scanner sc = new Scanner(System.in);
     static AuthService as = new AuthServiceImpl();
@@ -114,22 +119,24 @@ public class Shop {
 
     static void customerOptions(User user) {
 
-        print("What would you like to do?", "1. View our products to make an offer", "2. View products you've purchased", "3. Logout");
+        print("What would you like to do?", "1. View our products to make an offer", "2. View products you've purchased", "3. View accepted offers awaiting payment", "4. Logout");
         
         String customerChoice = sc.nextLine();
 
-        while (!customerChoice.equals("1") && !customerChoice.equals("2") && !customerChoice.equals("3")) {
-            print("Please enter 1 2, or 3", "1. View our products to make an offer", "2. View products you've purchased", "3. Logout");
+        while (!customerChoice.equals("1") && !customerChoice.equals("2") && !customerChoice.equals("3") && !customerChoice.equals("4")) {
+            print("Please enter 1 2, 3, or 4", "1. View our products to make an offer", "2. View products you've purchased", "3. View accepted offers awaiting payment", "4. Logout");
 
             customerChoice = sc.nextLine();
         }
 
-        if (customerChoice.equals("3")) {
+        if (customerChoice.equals("4")) {
             sc.close();
         } else if (customerChoice.equals("1")) {
             customerProducts(user);
         } else if (customerChoice.equals("2")) {
         	viewOwnedItems(user);
+        } else if (customerChoice.equals("3")) {
+            customerViewPayments(user);
         }
         
     }
@@ -189,23 +196,24 @@ public class Shop {
                 } catch (ItemNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                    log.error("There was an issue with getting an item " + e.fillInStackTrace());
                 }
             }
         }
     }
 
     static void employeeOptions(User user) {
-        print("What would you like to do?", "1. Remove an item", "2. Add an item", "3. See offers", "4. Logout");
+        print("What would you like to do?", "1. Remove an item", "2. Add an item", "3. See offers", "4. See payments received", "5. Logout");
         
         String employeeChoice = sc.nextLine();
 
-        while (!employeeChoice.equals("1") && !employeeChoice.equals("2") && !employeeChoice.equals("3") && !employeeChoice.equals("4")) {
-            print("Please enter 1, 2, 3, or 4", "1. Remove an item", "2. Add an item", "3. See offers", "4. Logout");
+        while (!employeeChoice.equals("1") && !employeeChoice.equals("2") && !employeeChoice.equals("3") && !employeeChoice.equals("4") && !employeeChoice.equals("5")) {
+            print("Please enter 1, 2, 3, or 4", "1. Remove an item", "2. Add an item", "3. See offers", "4. See payments received", "5. Logout");
 
             employeeChoice = sc.nextLine();
         }
 
-        if (employeeChoice.equals("4")) {
+        if (employeeChoice.equals("5")) {
             sc.close();
         } else if (employeeChoice.equals("1")) {
             customerProducts(user);
@@ -213,6 +221,8 @@ public class Shop {
             addAnItem(user);
         } else if (employeeChoice.equals("3")) {
             viewOffers(user);
+        } else if (employeeChoice.equals("4")) {
+            viewPaymentsReceived(user);
         }
     }
 
@@ -323,7 +333,7 @@ public class Shop {
                 boolean offerAccepted = os.acceptOffer(Integer.parseInt(offerChoice), offerBeingAccepted);
 
                 if (offerAccepted) {
-                    print("You just earned " + offerBeingAccepted.getOfferAmount() + ". Press enter to return to main menu.");
+                    print("You just accepted an offer of " + offerBeingAccepted.getOfferAmount() + ". Press enter to return to main menu.");
                     
                 } else {
                     print("Something went wrong. Press enter to return to main menu");
@@ -343,6 +353,44 @@ public class Shop {
             employeeOptions(user);
         }
     }
+
+    static void customerViewPayments(User user) {
+        print("Here are the items waiting for payment. Enter the number of the item you're ready to pay", "You can also press 0 to return to main menu");
+
+        List<Offer> offers = os.getAcceptedOffersByCustomer(user.getId());
+
+        for (Offer offer : offers) {
+            print(offer.getItem().getId() + ". " + offer.getItem().getItemName() + " awaiting payment of $" + offer.getOfferAmount());
+        }
+
+        String payingItem = sc.nextLine();
+
+        if (payingItem.equals("0")) {
+            customerOptions(user);
+        } else {
+            boolean itemPaid = is.payForItem(Integer.parseInt(payingItem));
+
+            if (itemPaid) {
+                try {
+                    Item item = is.getItem(Integer.parseInt(payingItem));
+                    print("You now own the " + item.getItemName() + ". Press enter to return to main menu");
+                    sc.nextLine();
+
+                    customerOptions(user);
+                } catch (NumberFormatException e) {
+                    // TODO Auto-generated catch block
+                    log.error("NumberFormatException was throw: " + e.fillInStackTrace());
+                    e.printStackTrace();
+                } catch (ItemNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    log.error("ItemNotFoundException was throw: " + e.fillInStackTrace());
+                    e.printStackTrace();
+                }
+                
+            }
+        }
+
+    }
     
     static void viewOwnedItems(User user) {
     	print("Here are all the items you own. Press enter to go back to main menu");
@@ -357,5 +405,18 @@ public class Shop {
     	
     	customerOptions(user);
     }
+    
+    static void viewPaymentsReceived(User user) {
+        print("Here are all the payments received. Press enter to go back to main menu");
 
+        List<Offer> offers = os.getAllPayments();
+
+        for (Offer offer : offers) {
+            print(offer.getOfferAmount() + " from " + offer.getUser().getUsername() + " for " + offer.getItem().getItemName());
+        }
+
+        sc.nextLine();
+
+        employeeOptions(user);
+    }
 }

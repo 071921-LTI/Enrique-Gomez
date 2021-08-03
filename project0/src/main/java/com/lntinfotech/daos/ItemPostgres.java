@@ -118,7 +118,7 @@ public class ItemPostgres implements ItemDao {
 
     @Override
     public List<Offer> getItemsByOwner(int ownerId) {
-        String sql = "select * from items join offers on offers.itemId = items.itemId where isAccepted = true and customerId = ?";
+        String sql = "select * from items join offers on offers.itemId = items.itemId where offers.isAccepted = true and items.isPurchased = true and customerId = ?";
         List<Offer> offers = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection()) {
         	PreparedStatement statement = connection.prepareStatement(sql);
@@ -143,6 +143,21 @@ public class ItemPostgres implements ItemDao {
         }
         
         return offers;
+    }
+
+    @Override
+    public boolean payItem(int itemId) {
+        String sql = "update items set isPurchased = true where itemId = ? returning itemId";
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, itemId);
+            statement.executeQuery();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
 }
