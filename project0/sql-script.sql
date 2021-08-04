@@ -34,4 +34,5 @@ insert into offers(customerId, itemId, offerAmount) values (2, 1, 50);
 insert into offers(customerId, itemId, offerAmount) values (2, 1, 50);
 
 select * from offers join items on offers.itemId = items.itemId join users on offers.customerId = users.userId;
-select * from offers join items on offers.itemId = items.itemId where isAccepted = true;
+select * from offers join items on offers.itemId = items.itemId where isAccepted = true and isPurchased = true;
+select * from offers join items on offers.itemId = items.itemId join users on offers.customerId = users.userId where items.ispurchased = true;
