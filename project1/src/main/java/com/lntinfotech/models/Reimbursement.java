@@ -3,16 +3,45 @@ package com.lntinfotech.models;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "reimbursements")
 public class Reimbursement {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "reimb_id")
     private int id;
+	@Column(columnDefinition = "NUMERIC(8, 2)", nullable = false)
     private double amount;
+	@Column(name = "submitted", nullable = false)
     private Date dateSubmitted;
+	@Column(name = "resolved")
     private Date dateResolved;
+	@Column(nullable = false)
     private String description;
+	@Column
     private String receipt;
+	@ManyToOne(cascade = {CascadeType.REMOVE}, targetEntity = User.class)
+	@JoinColumn(name = "author", nullable = false)
     private User author;
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "resolver")
     private User resolver;
+	@ManyToOne(targetEntity = Status.class)
+	@JoinColumn(name = "status_id", nullable = false)
     private Status status;
+	@ManyToOne(targetEntity = Type.class)
+	@JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     public Reimbursement() {

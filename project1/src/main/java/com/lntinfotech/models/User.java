@@ -2,19 +2,56 @@ package com.lntinfotech.models;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
     
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
     private int id;
+	@Column(unique = true, nullable = false)
     private String username;
+	@Column(nullable = false)
     private String password;
+	@Column(name = "first_name", nullable = false)
     private String firstName;
+	@Column(name = "last_name", nullable = false)
     private String lastName;
+	@Column(name = "email", nullable = false)
     private String email;
+	@ManyToOne(targetEntity = Role.class)
+	@JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     public User() {
         super();
     }
+
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+
+	public User(int id, String username, String firstName, String lastName, String email, Role role) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.role = role;
+	}
 
     public User(int id, String username, String password, String firstName, String lastName, String email, Role role) {
         super();
