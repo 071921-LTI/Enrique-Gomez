@@ -5,6 +5,7 @@ import java.util.List;
 import com.lntinfotech.daos.ReimbursementDao;
 import com.lntinfotech.daos.ReimbursementHibernate;
 import com.lntinfotech.models.Reimbursement;
+import com.lntinfotech.models.Status;
 
 public class ReimbursementServiceImpl implements ReimbursementService{
 
@@ -12,20 +13,17 @@ public class ReimbursementServiceImpl implements ReimbursementService{
 
     @Override
     public List<Reimbursement> getAllPendingRequests() {
-        // TODO Auto-generated method stub
-        return null;
+        return reimbDao.getAllPendingRequests();
     }
 
     @Override
     public List<Reimbursement> getAllResolvedRequests() {
-        // TODO Auto-generated method stub
-        return null;
+        return reimbDao.getAllResolvedRequests();
     }
 
     @Override
     public List<Reimbursement> getRequestsByEmployeeId(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        return reimbDao.getAllReimbursementsByUserId(id);
     }
 
     @Override
@@ -35,14 +33,20 @@ public class ReimbursementServiceImpl implements ReimbursementService{
 
     @Override
     public List<Reimbursement> getPendingReimbursementsByEmployeeId(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        return reimbDao.getPendingReimbursementsByUserId(id);
     }
 
     @Override
     public List<Reimbursement> getResolvedReimbursementsByEmployeeId(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        return reimbDao.getResolvedReimbursementsByUserId(id);
+    }
+
+    @Override
+    public boolean resolveRequest(Reimbursement reimbursement) {
+        Reimbursement newReimbursement = reimbDao.getReimbursementById(reimbursement.getId());
+        newReimbursement.setStatus(reimbursement.getStatus());
+        reimbDao.updateReimbursement(newReimbursement);
+        return true;
     }
     
 }

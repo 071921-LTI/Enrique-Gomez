@@ -2,6 +2,8 @@ package com.lntinfotech.delegates;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lntinfotech.models.Reimbursement;
+import com.lntinfotech.models.User;
 import com.lntinfotech.services.ReimbursementService;
 import com.lntinfotech.services.ReimbursementServiceImpl;
 
@@ -44,19 +47,44 @@ public class ReimbursementDelegate implements Delegatable {
             String[] authSplit = auth.split(":");
             int id = Integer.parseInt(authSplit[0]);
             String role = authSplit[1];
+            List<Reimbursement> reimbursements = null;
             if (role.equals("Employee")) {
                 switch (status) {
-                    case "pending": System.out.println("pending requests");
+                    case "pending": 
+                        reimbursements = reimbService.getPendingReimbursementsByEmployeeId(id);
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
                         break;
-                    case "resolved": System.out.println("resolved requests");
+                    case "resolved":
+                        reimbursements = reimbService.getResolvedReimbursementsByEmployeeId(id);
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
                         break;
                     default: rs.sendError(404);
                 }
             } else if (role.equals("Manager")) {
                 switch (status) {
-                    case "pending": System.out.println("pending requests");
+                    case "pending":
+                        reimbursements = reimbService.getAllPendingRequests();
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
                         break;
-                    case "resolved": System.out.println("resolved requests");
+                    case "resolved":
+                        reimbursements = reimbService.getAllResolvedRequests();
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
+                        break;
+                    case "employee":
+                        InputStream employeeStream = rq.getInputStream();
+                        User employee = new ObjectMapper().readValue(employeeStream, User.class);
+                        reimbursements = reimbService.getRequestsByEmployeeId(employee.getId());
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
                         break;
                     default: rs.sendError(404);
                 }
@@ -69,6 +97,7 @@ public class ReimbursementDelegate implements Delegatable {
 
     @Override
     public void handlePost(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
+        System.out.println("it hit!");
         InputStream info = rq.getInputStream();
 
         Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
@@ -84,8 +113,16 @@ public class ReimbursementDelegate implements Delegatable {
 
     @Override
     public void handlePut(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        
+        InputStream info = rq.getInputStream();
+
+        Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
+
+        boolean success = reimbService.resolveRequest(reimbursement);
+        if (success) {
+            rs.setStatus(200);
+        } else {
+            rs.sendError(400);
+        }
     }
 
     @Override

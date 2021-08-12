@@ -11,4 +11,5 @@ public interface ReimbursementService {
     Reimbursement submitReimbursementRequest(Reimbursement reimbursement);
     List<Reimbursement> getPendingReimbursementsByEmployeeId(int id);
     List<Reimbursement> getResolvedReimbursementsByEmployeeId(int id);
+    boolean resolveRequest(Reimbursement reimbursement);
 }
