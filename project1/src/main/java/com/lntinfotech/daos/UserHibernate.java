@@ -39,9 +39,9 @@ public class UserHibernate implements UserDao {
     public List<User> getEmployees() {
         List<User> users = null;
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "from User where role = :role";
+            String hql = "from User where role_id = :role";
             TypedQuery<User> query = s.createQuery(hql, User.class);
-            query.setParameter("role", "Employee");
+            query.setParameter("role", 2);
             users = query.getResultList();
         }
 

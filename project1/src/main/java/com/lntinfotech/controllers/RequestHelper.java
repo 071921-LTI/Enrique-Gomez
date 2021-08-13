@@ -8,12 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lntinfotech.delegates.AuthDelegate;
 import com.lntinfotech.delegates.Delegatable;
+import com.lntinfotech.delegates.EmployeeDelegate;
 import com.lntinfotech.delegates.ReimbursementDelegate;
 
 public class RequestHelper {
 
 	private Delegatable authDelegate = new AuthDelegate();
 	private Delegatable reimbDelegate = new ReimbursementDelegate();
+	private Delegatable employeeDelegate = new EmployeeDelegate();
 	
 	public void process(HttpServletRequest rq, HttpServletResponse rs) throws IOException, ServletException {
 		
@@ -25,14 +27,23 @@ public class RequestHelper {
 			
 			if(path.indexOf("/") != -1) {
 				String[] paths = path.split("/");
+
 				path = paths[0];
-				rq.setAttribute("pathNext", paths[1]);
+
+				try {
+					rq.setAttribute("pathNext", paths[1]);
+				} catch (Exception e) {
+					rq.setAttribute("pathNext", "");	
+				}
+				
 			}
 			
 			switch(path) {
 				case "authorize": authDelegate.process(rq, rs);
 					break;
 				case "reimbursement": reimbDelegate.process(rq, rs);
+					break;
+				case "employee": employeeDelegate.process(rq, rs);
 					break;
 			default:
 				rs.sendError(400, "Path not supported:" + path);

@@ -5,7 +5,6 @@ import java.util.List;
 import com.lntinfotech.daos.ReimbursementDao;
 import com.lntinfotech.daos.ReimbursementHibernate;
 import com.lntinfotech.models.Reimbursement;
-import com.lntinfotech.models.Status;
 
 public class ReimbursementServiceImpl implements ReimbursementService{
 
@@ -45,6 +44,7 @@ public class ReimbursementServiceImpl implements ReimbursementService{
     public boolean resolveRequest(Reimbursement reimbursement) {
         Reimbursement newReimbursement = reimbDao.getReimbursementById(reimbursement.getId());
         newReimbursement.setStatus(reimbursement.getStatus());
+        newReimbursement.setResolver(reimbursement.getResolver());
         reimbDao.updateReimbursement(newReimbursement);
         return true;
     }

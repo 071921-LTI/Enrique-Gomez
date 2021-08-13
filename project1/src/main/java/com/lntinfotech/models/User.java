@@ -37,6 +37,11 @@ public class User {
         super();
     }
 
+	public User(int id) {
+		super();
+		this.id = id;
+	}
+
 	public User(String username, String password) {
 		super();
 		this.username = username;

@@ -113,15 +113,23 @@ public class ReimbursementDelegate implements Delegatable {
 
     @Override
     public void handlePut(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        InputStream info = rq.getInputStream();
+        String auth = rq.getHeader("Authorization");
+        String userId = auth.split(":")[0];
+        String userRole = auth.split(":")[1];
 
-        Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
+        if (userRole.equals("Manager")) {
+            InputStream info = rq.getInputStream();
 
-        boolean success = reimbService.resolveRequest(reimbursement);
-        if (success) {
-            rs.setStatus(200);
+            Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
+            reimbursement.setResolver(new User(Integer.valueOf(userId)));
+            boolean success = reimbService.resolveRequest(reimbursement);
+            if (success) {
+                rs.setStatus(200);
+            } else {
+                rs.sendError(400);
+            }
         } else {
-            rs.sendError(400);
+            rs.sendError(401);
         }
     }
 

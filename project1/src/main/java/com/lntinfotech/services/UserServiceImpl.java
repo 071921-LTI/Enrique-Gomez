@@ -1,13 +1,17 @@
 package com.lntinfotech.services;
 
+import com.lntinfotech.daos.UserDao;
+import com.lntinfotech.daos.UserHibernate;
 import com.lntinfotech.models.User;
 
 public class UserServiceImpl implements UserService {
 
+    UserDao userDao = new UserHibernate();
+
     @Override
-    public int updateUserInfo(User user) {
-        // TODO Auto-generated method stub
-        return 0;
+    public boolean updateUserInfo(User user) {
+        userDao.updateUser(user);
+        return true;
     }
     
 }
