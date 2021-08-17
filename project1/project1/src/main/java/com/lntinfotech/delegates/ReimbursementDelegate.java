@@ -62,6 +62,13 @@ public class ReimbursementDelegate implements Delegatable {
                             pw.write(new ObjectMapper().writeValueAsString(reimbursements));
                         }
                         break;
+                    case "":
+                        reimbursements = reimbService.getRequestsByEmployeeId(id);
+                        System.out.println(reimbursements.toString());
+                        try (PrintWriter pw = rs.getWriter()) {
+                            pw.write(new ObjectMapper().writeValueAsString(reimbursements));
+                        }
+                        break;
                     default: rs.sendError(404);
                 }
             } else if (role.equals("Manager")) {
@@ -97,10 +104,14 @@ public class ReimbursementDelegate implements Delegatable {
 
     @Override
     public void handlePost(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        System.out.println("it hit!");
         InputStream info = rq.getInputStream();
 
+        String auth = rq.getHeader("Authorization");
+        System.out.println(auth);
+        int id = Integer.valueOf(auth.split(":")[0]);
+
         Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
+        reimbursement.setAuthor(new User(id));
 
         Reimbursement submittedReimbursement = reimbService.submitReimbursementRequest(reimbursement);
 

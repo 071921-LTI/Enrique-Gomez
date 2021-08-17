@@ -2,6 +2,7 @@ package com.lntinfotech.daos;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.lntinfotech.models.User;
@@ -30,6 +31,8 @@ public class UserHibernate implements UserDao {
             TypedQuery<User> query = s.createQuery(hql, User.class);
             query.setParameter("username", username);
             user = query.getSingleResult();
+        } catch (NoResultException e) {
+            user = null;
         }
 
         return user;

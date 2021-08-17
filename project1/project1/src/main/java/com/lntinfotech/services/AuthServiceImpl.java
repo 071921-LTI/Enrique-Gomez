@@ -12,11 +12,13 @@ public class AuthServiceImpl implements AuthService {
     public User login(User user) {
         User checkingUser = userDao.getUserByUsername(user.getUsername());
 
-        if (user.getPassword().equals(checkingUser.getPassword())) {
-            return checkingUser;
-        } else {
-            return null;
+        if (checkingUser != null) {
+            if (!user.getPassword().equals(checkingUser.getPassword())) {
+                checkingUser = null;
+            }
         }
+
+        return checkingUser;
     }
 
     @Override

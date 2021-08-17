@@ -36,13 +36,16 @@ public class AuthDelegate implements Delegatable {
 
     @Override
     public void handleGet(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        System.out.println("it hit!");
+
+    }
+
+    @Override
+    public void handlePost(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
         InputStream info = rq.getInputStream();
 
         User credentials = new ObjectMapper().readValue(info, User.class);
-
         User loggedInUser = authService.login(credentials);
-
+        
         if (loggedInUser == null) {
             rs.sendError(404);
         } else {
@@ -50,17 +53,10 @@ public class AuthDelegate implements Delegatable {
 
             rs.setStatus(200);
         }
-        
-    }
-
-    @Override
-    public void handlePost(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        
     }
 
     @Override
     public void handlePut(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        // TODO Auto-generated method stub
         
     }
 
