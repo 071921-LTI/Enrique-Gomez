@@ -45,6 +45,7 @@ public class ReimbursementServiceImpl implements ReimbursementService{
         Reimbursement newReimbursement = reimbDao.getReimbursementById(reimbursement.getId());
         newReimbursement.setStatus(reimbursement.getStatus());
         newReimbursement.setResolver(reimbursement.getResolver());
+        System.out.println(newReimbursement.toString());
         reimbDao.updateReimbursement(newReimbursement);
         return true;
     }

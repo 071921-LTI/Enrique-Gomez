@@ -38,13 +38,15 @@ public class ReimbursementDelegate implements Delegatable {
 
     @Override
     public void handleGet(HttpServletRequest rq, HttpServletResponse rs) throws ServletException, IOException {
-        String status = rq.getAttribute("pathNext").toString().split("/")[0];
+        String status = rq.getAttribute("pathNext").toString();
+        String[] pathInfo = rq.getPathInfo().split("/");
         String pathNext;
         try {
-            pathNext = rq.getAttribute("pathNext").toString().split("/")[1];
+            pathNext = pathInfo[pathInfo.length - 1];
         } catch (Exception e) {
             pathNext = "";
         }
+        System.out.println(pathNext);
         String auth = rq.getHeader("Authorization");
         
         if (auth == null || auth.replaceAll("\\s", "").equals("")) {
@@ -140,7 +142,7 @@ public class ReimbursementDelegate implements Delegatable {
 
         if (userRole.equals("Manager")) {
             InputStream info = rq.getInputStream();
-
+            
             Reimbursement reimbursement = new ObjectMapper().readValue(info, Reimbursement.class);
             reimbursement.setResolver(new User(Integer.valueOf(userId)));
             boolean success = reimbService.resolveRequest(reimbursement);
