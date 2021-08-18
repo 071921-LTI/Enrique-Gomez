@@ -48,5 +48,10 @@ public class ReimbursementServiceImpl implements ReimbursementService{
         reimbDao.updateReimbursement(newReimbursement);
         return true;
     }
+
+    @Override
+    public List<Reimbursement> getAllReimbursements() {
+        return reimbDao.getAllReimbursements();
+    }
     
 }

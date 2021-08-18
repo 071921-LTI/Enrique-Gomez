@@ -5,6 +5,7 @@ import java.util.List;
 import com.lntinfotech.models.Reimbursement;
 
 public interface ReimbursementService {
+    List<Reimbursement> getAllReimbursements();
     List<Reimbursement> getAllPendingRequests();
     List<Reimbursement> getAllResolvedRequests();
     List<Reimbursement> getRequestsByEmployeeId(int id);
