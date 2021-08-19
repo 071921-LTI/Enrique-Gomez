@@ -11,8 +11,8 @@
 
     <title>Manager</title>
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <body class='bg-dark text-white'>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary mb-5">
         <a class="navbar-brand" href="manager.html">Manager</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -24,32 +24,44 @@
               <a class="nav-link" href="manager.html">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+              <a class="nav-link" href="reimbursement.html">Requests</a>
             </li>
           </ul>
           <div class="nav-item dropdown mr-5">
             <text class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Sign out
             </text>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Yes, sign me out</a>
+            <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item text-white" id='sign-out' href="#">Yes, sign me out</a>
             </div>
           </div>
         </div>
       </nav>
-      <h4 class='ml-2'>Employees</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Username</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope='col'>Email</th>
-            <tbody id='requests'></tbody>
-          </tr>
-        </thead>
-      </table>
+      <div class='container-fluid px-5'>
+        <div class='row'>
+          <h4 class='col-md-5'>Employees</h4>
+          <div class='col-md-1'></div>
+          <h4 class='col-md-6' id='request-table-title'></h4>
+        </div>
+        <div class='row'>
+          <div class='col-md-5'>
+            <table class="table table-striped table-dark rounded">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope='col'>Email</th>
+                  <tbody id='requests' class='table-striped'></tbody>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div class='col-md-1'></div>
+          <div id='table-div' class='col-md-6'></div>
+        </div>
+      </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

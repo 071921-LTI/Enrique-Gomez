@@ -25,7 +25,11 @@ async function populateRequests(filter) {
         }
     });
 
-    const data = await response.json();
+    const parsedResponse = await response.json()
+    
+    const data = parsedResponse.sort((a, b) => {
+        return b.dateSubmitted - a.dateSubmitted;
+    });
     
     const requestsList = document.getElementById('requests');
     const dataHTMLArray = data.map(item => {
@@ -34,8 +38,8 @@ async function populateRequests(filter) {
             <tr data-id='${item.id}'>
             <td>${item.id}</th>
             <td>${item.amount}</td>
-            <td>${new Date(item.dateSubmitted)}</td>
-            <td>${item.dateResolved ? new Date(item.dateResolved) : 'N/A'}</td>
+            <td>${new Date(item.dateSubmitted).toLocaleDateString()}</td>
+            <td>${item.dateResolved ? new Date(item.dateResolved).toLocaleDateString() : 'N/A'}</td>
             <td>${item.description}</td>
             <td>${item.resolver ? item.resolver.firstName + ' ' + item.resolver.lastName : 'N/A'}</td>
             <td>${item.status.status}</td>
@@ -52,6 +56,28 @@ async function populateRequests(filter) {
 function filter(e) {
     e.preventDefault();
     let filter = e.target.textContent.toLowerCase();
-    if (filter === 'all') filter = '';
+    const buttons = document.getElementsByClassName('filter-btn');
+
+    for (let i = 0; i < buttons.length; i++) {
+        const btnClass = buttons[i].classList;
+        if (!btnClass.contains('btn-secondary')) {
+            btnClass.add('btn-secondary');
+        }
+        if (btnClass.contains('btn-warning') || btnClass.contains('btn-success') || btnClass.contains('btn-primary')) {
+            btnClass.remove('btn-warning') || btnClass.remove('btn-success') || btnClass.remove('btn-primary');
+        }
+    }
+    if (filter === 'pending') {
+        e.target.classList.remove('btn-secondary');
+        e.target.classList.add('btn-warning');
+    } else if (filter === 'resolved') {
+        e.target.classList.remove('btn-secondary');
+        e.target.classList.add('btn-success');
+    }
+    else if (filter === 'all') {
+        e.target.classList.remove('btn-secondary');
+        e.target.classList.add('btn-primary');
+        filter = '';
+    }
     populateRequests(filter);
 }

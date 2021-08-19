@@ -6,7 +6,6 @@ let userInfo;
 getUserInfo();
 
 async function getUserInfo() {
-    
     const response = await fetch('http://localhost:8080/project1-0.0.1-SNAPSHOT/employee/', {
         headers: {
             'Authorization': auth
@@ -39,7 +38,7 @@ async function getUserInfo() {
 }
 
 function changeToInput(e) {
-    e.target.innerHTML = `<input value='${e.target.textContent}' id='${e.target.id}-input' class='finish-input'/>`;
+    e.target.innerHTML = `<input value='${e.target.textContent}' id='${e.target.id}-input' class='finish-input form-control'/>`;
     document.getElementById(`${e.target.id}-input`).focus();
     document.getElementById(`${e.target.id}-input`).addEventListener('keypress', event => changeProfile(event, e.target.id));
 }

@@ -11,17 +11,21 @@ async function submitRequest(e) {
     const descriptionInput = document.getElementById('description');
 
     const data = {
-        amount: parseInt(amountInput.value),
+        amount: parseInt(amountInput.value.trim()),
         dateSubmitted: new Date(),
         type: {
             id: parseInt(typeSelect.value)
         },
-        description: descriptionInput.value,
+        description: descriptionInput.value.trim(),
         status: {
             id: 1
         }
 
     }
+
+    amountInput.value = '';
+    typeSelect.value = 1;
+    descriptionInput.value = '';
 
     const response = fetch('http://localhost:8080/project1-0.0.1-SNAPSHOT/reimbursement/', {
         method: 'POST',
@@ -31,7 +35,11 @@ async function submitRequest(e) {
         body: JSON.stringify(data)
     })
 
-    console.log(response);
+    document.getElementById('alert').textContent = "Your request was submitted";
+
+    setTimeout(() => {
+        document.getElementById('alert').textContent = '';
+    }, 2000);
 
 }
 
