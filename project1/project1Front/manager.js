@@ -67,6 +67,7 @@ async function viewEmployeeRequests(id) {
         <th scope="col">Submitted</th>
         <th scope="col">Resolved</th>
         <th scope='col'>Description</th>
+        <th scope='col'>Receipt</th>
         <th scope='col'>Author</th>
         <th scope='col'>Resolver</th>
         <th scope='col'>Status</th>
@@ -74,12 +75,13 @@ async function viewEmployeeRequests(id) {
         </tr>
         <tbody id='requests'>${data.map(item => {
             return `
-            <tr ${item.status.status === 'pending' ? `onclick='resolveFunction(${item.id})'` : ''}'>
+            <tr ${item.status.status === 'pending' ? `onclick='resolveFunction(event, ${item.id})'` : ''}'>
             <td>${item.id}</td>
             <td>$${item.amount}</td>
             <td>${new Date(item.dateSubmitted).toLocaleDateString()}</td>
             <td>${item.dateResolved ? new Date(item.dateResolved).toLocaleDateString() : 'N/A'}</td>
             <td>${item.description}</td>
+            <td><a href='${item.receipt}'>View Receipt</a></td>
             <td>${item.author.firstName} ${item.author.lastName}</td>
             <td>${item.resolver ? `${item.resolver.firstName} ${item.resolver.lastName}` : 'N/A'}</td>
             <td>${item.status.status}</td>
@@ -93,29 +95,31 @@ async function viewEmployeeRequests(id) {
     document.getElementById('table-div').appendChild(table);
 }
 
-function resolveFunction(id) {
-    const input = prompt("Enter 'approve' or 'deny'");
-    let decision;
+function resolveFunction(e, id) {
+    if (e.target.tagName !== 'A') {
+        const input = prompt("Enter 'approve' or 'deny'");
+        let decision;
 
-    if (input.toLowerCase() === 'approve') {
-        decision = 2;
-    } else if (input.toLowerCase() === 'deny') {
-        decision = 3;
-    } else {
-        alert("Please enter 'approve' or 'deny'");
-    }
-
-    
-
-    const updatedRequest = {
-        id,
-        dateResolved: new Date(),
-        status: {
-            id: decision
+        if (input.toLowerCase() === 'approve') {
+            decision = 2;
+        } else if (input.toLowerCase() === 'deny') {
+            decision = 3;
+        } else {
+            alert("Please enter 'approve' or 'deny'");
         }
-    }
 
-    updateRequest(updatedRequest, id);
+        
+
+        const updatedRequest = {
+            id,
+            dateResolved: new Date(),
+            status: {
+                id: decision
+            }
+        }
+
+        updateRequest(updatedRequest, id);
+    }
 }
 
 async function updateRequest(updatedRequest, id) {

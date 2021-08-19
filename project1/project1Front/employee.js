@@ -41,6 +41,7 @@ async function populateRequests(filter) {
             <td>${new Date(item.dateSubmitted).toLocaleDateString()}</td>
             <td>${item.dateResolved ? new Date(item.dateResolved).toLocaleDateString() : 'N/A'}</td>
             <td>${item.description}</td>
+            <td><a href='${item.receipt}'>View Receipt</a><td>
             <td>${item.resolver ? item.resolver.firstName + ' ' + item.resolver.lastName : 'N/A'}</td>
             <td>${item.status.status}</td>
             <td>${item.type.type}</td>

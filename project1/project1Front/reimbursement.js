@@ -35,12 +35,13 @@ async function populateRequests(filter) {
     const dataHTMLArray = data.map(item => {
         // if (filter.all) {
             return `
-            <tr data-id='${item.id}' ${filter === 'pending' ? `onclick='resolveFunction(${item.id})' style='cursor:pointer'` : ''}>
+            <tr data-id='${item.id}' ${item.status.status === 'pending' ? `onclick='resolveFunction(event, ${item.id})' style='cursor:pointer'` : ''}>
             <td>${item.id}</td>
             <td>$${item.amount}</td>
             <td>${new Date(item.dateSubmitted).toLocaleDateString()}</td>
             <td>${item.dateResolved ? new Date(item.dateResolved).toLocaleDateString() : 'N/A'}</td>
             <td>${item.description}</td>
+            <td><a href='${item.receipt}'} target='_blank'>View Receipt</a><td>
             <td>${item.author.firstName} ${item.author.lastName}</td>
             <td>${item.resolver ? item.resolver.firstName + ' ' + item.resolver.lastName : 'N/A'}</td>
             <td>${item.status.status}</td>
@@ -85,29 +86,31 @@ function filter(e) {
     populateRequests(filter);
 }
 
-function resolveFunction(id) {
-    const input = prompt("Enter 'approve' or 'deny'");
-    let decision;
+function resolveFunction(e, id) {
+    if (e.target.tagName !== 'A') {
+        const input = prompt("Enter 'approve' or 'deny'");
+        let decision;
 
-    if (input.toLowerCase() === 'approve') {
-        decision = 2;
-    } else if (input.toLowerCase() === 'deny') {
-        decision = 3;
-    } else {
-        alert("Please enter 'approve' or 'deny'");
-    }
-
-    
-
-    const updatedRequest = {
-        id,
-        dataResolved: new Date(),
-        status: {
-            id: decision
+        if (input.toLowerCase() === 'approve') {
+            decision = 2;
+        } else if (input.toLowerCase() === 'deny') {
+            decision = 3;
+        } else {
+            alert("Please enter 'approve' or 'deny'");
         }
-    }
 
-    updateRequest(updatedRequest);
+        
+
+        const updatedRequest = {
+            id,
+            dateResolved: new Date(),
+            status: {
+                id: decision
+            }
+        }
+
+        updateRequest(updatedRequest, id);
+    }
 }
 
 async function updateRequest(updatedRequest) {
